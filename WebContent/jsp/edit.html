@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<title>VotingOnline编辑</title>
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<link rel="stylesheet" href="css/font-awesome.css">
+	<script src="js/jquery-3.3.1.min.js"></script>
+	<script src="js/bootstrap.js"></script>
+
+	<style type="text/css">
+		a{
+			color: #666;
+		}
+
+		body{
+			color: #666;
+		}
+
+		/*题目覆盖样式*/
+		.card:hover {
+			background-color: #d4edda33;
+		}
+
+		/*错误图标颜色*/
+
+		.cardfooter .fa-times-circle,
+		.no {
+			color: #f00;
+		}
+
+		/*正确图标颜色*/
+
+		.fa-clone,
+		.yes {
+			color: #00A65A;
+		}
+
+		/*警告图标颜色*/
+
+		.fa-warning {
+			color: #ffff00;
+		}
+
+		#btnGroup {
+			position: fixed;
+			left: 0;
+			width: 10rem;
+			/*background: #f0f2f5;*/
+			min-height: 500px;
+			border-top-right-radius: 5px;
+			border-bottom-right-radius: 5px;
+			padding-bottom: 1rem;
+		}
+
+		#editForm {
+			position: fixed;
+			right: 2rem;
+			border-top-left-radius: 5px;
+			border-bottom-left-radius: 5px;
+			padding-bottom: 1rem;
+			max-width: 16.666667%;
+		}
+		.navbar-light {
+    background: #fff;
+    box-shadow: 0 0 2px 0 rgba(0,0,0,0.5);
+}
+
+		/*
+<i class="fa fa-plus" aria-hidden="true"></i>
+图标大小：fa-lg/fa-2x/..../fa-5x
+旋转功能：fa-spin
+图标颜色：设置i标签的color属性
+旋转图标：fa-refresh 
+警告图标：fa-warning  color:ffff00
+错误图标：fa-times-circle     color:f00
+正确图标： fa-check     color:00A65A
+上传图标：fa-upload
+删除图标：fa-trash-o/ fa-trash
+修改图标：fa-edit
+添加图标：fa-plus
+下载图标：fa-download
+导入图标：fa-sign-in
+导出图标：fa-sign-out
+增加图标：fa-plus
+减少图标：fa-minus
+克隆图标：fa-clone
+*/
+	</style>
+</head>
+
+<body>
+	<!-- navbar -->
+	<nav class="navbar navbar-expand-lg navbar-light fixed-top" id="navHeader">
+		<a class="navbar-brand ml-5" href="#">
+			 Online Voting
+		</a>
+			<ul class="nav ml-auto">
+				<li class="nav-item active">
+					<a class="nav-link" href="#">首页
+						<span class="sr-only">(current)</span>
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#">探索</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#">登录</a>
+				</li>
+			
+			</ul>
+	</nav>
+	<!-- /navbar -->
+	<div class="container-fluid pt-5 mt-5" style=" background: #f2f2f2; ">
+		<div class="row justify-content-md-center">
+
+			<div id="btnGroup">
+
+				<div class="d-flex justify-content-center">
+					<button type="button" class="btn btn-sm btn-outline-primary" id="radioVertical">单选题(多行)</button>
+				</div>
+				<div class="mt-3 d-flex justify-content-center">
+					<button type="button" class="btn btn-sm btn-outline-primary" id="radioInline">单选题(单行)</button>
+				</div>
+
+				<div class="mt-3 d-flex justify-content-center">
+					<button type="button" class="btn btn-sm btn-outline-secondary" id="createMultipleVertical">多选题(多行)</button>
+				</div>
+				<div class="mt-3 d-flex justify-content-center">
+					<button type="button" class="btn btn-sm btn-outline-secondary" id="createMultipleInline">多选题(单行)</button>
+				</div>
+
+				<div class="mt-5 d-flex justify-content-center">
+					<button type="button" class="btn btn-sm btn-outline-success">Success</button>
+				</div>
+				<div class="mt-3 d-flex justify-content-center">
+					<button type="button" class="btn btn-sm btn-outline-success" id="generateFinishQuestionForm">生成表单</button>
+				</div>
+				<div class="mt-3 d-flex justify-content-center">
+					<button type="button" class="btn btn-sm btn-outline-success" id="orderQuestion">题目排序</button>
+				</div>
+
+				<div class="mt-3 d-flex justify-content-center">
+					<button type="button" class="btn btn-sm btn-outline-success" id="prviewThis">预览</button>
+				</div>
+			</div>
+			<div class="col-sm-7" style="min-height: 500px;background: #fff;padding: 30px 50px 200px 50px;-webkit-box-shadow: 0 1px 2px 0 rgba(0,0,0,0.3);box-shadow:
+			0 1px 2px 0 rgba(0,0,0,0.3);">
+
+				<form id="myFormId" method="post" action="#">
+					<div class="" style="position:fixed;right: 9rem;top: 50%; display: none;" id="cancelPrviewBut">
+						<button type="button" class="btn btn-sm btn-outline-dark">OK</button>
+					</div>
+					<h3>调查问卷</h3>
+					<i id="flagLocation"></i>
+					<div class="card mt-3" id="card1" style="border-color: #ffffff">
+						<div class="card-body">
+							<h5 class="titleQuestion">
+								<span class="badge badge-success mr-2 questionOrder">2</span>
+								<span class="card-title editResult">你最喜欢的明星？</span>
+							</h5>
+							<div class="custom-control custom-radio custom-control-inline">
+								<input type="radio" id="customRadio1" name="customRadio" class="custom-control-input">
+								<label class="custom-control-label editResult" for="customRadio1">周***</label>
+							</div>
+							<div class="custom-control custom-radio custom-control-inline">
+								<input type="radio" id="customRadio2" name="customRadio" class="custom-control-input">
+								<label class="custom-control-label editResult" for="customRadio2">王**</label>
+							</div>
+							<div class="custom-control custom-radio custom-control-inline">
+								<input type="radio" id="customRadio3" name="customRadio" class="custom-control-input">
+								<label class="custom-control-label editResult" for="customRadio3">王**</label>
+							</div>
+							<div class="custom-control custom-radio custom-control-inline">
+								<input type="radio" id="customRadio4" name="customRadio" class="custom-control-input">
+								<label class="custom-control-label editResult" for="customRadio4">王**</label>
+							</div>
+						</div>
+						<div class="cardfooter" style="position: absolute;right: 1rem;top: 1rem; display: none;">
+							<span class="fa fa-times-circle mr-3 delete" name="card1"></span>
+							<span class="fa fa-clone copy  mr-3" name="card1"></span>
+							<span class="fa fa-pencil-square-o edit text-info" name="card1" aria-hidden="true"></span>
+						</div>
+					</div>
+
+					<div class="card mt-3" id="card03" style="border-color: #ffffff">
+						<div class="card-body">
+							<h5 class="titleQuestion">
+								<span class="badge badge-success mr-2 questionOrder">2</span>
+								<span class="card-title editResult">你最喜欢的明星？</span>
+							</h5>
+							<div class="custom-control">
+								<label for="inputByHand" hidden>Example textarea</label>
+								<textarea class="form-control" id="inputByHand" rows="3"></textarea>
+							</div>
+						</div>
+						<div class="cardfooter" style="position: absolute;right: 1rem;top: 1rem; display: none;">
+							<span class="fa fa-times-circle mr-3 delete" name="card03"></span>
+							<span class="fa fa-clone copy mr-3" name="card03"></span>
+							<span class="fa fa-pencil-square-o edit text-info" name="card03" aria-hidden="true"></span>
+						</div>
+					</div>
+
+					<div class="card mt-3" id="card02" style="border-color: #ffffff;">
+						<div class="card-body">
+							<h5 class="titleQuestion">
+								<span class="badge badge-success mr-2 questionOrder">2</span>
+								<span class="card-title editResult">你喜欢周国平的哪一句话？</span>
+							</h5>
+							<div class="custom-control custom-radio">
+								<input type="radio" id="customRadio01" name="customRadio" class="custom-control-input">
+								<label class="custom-control-label editResult" for="customRadio01">我始终相信，一切高贵的情感都羞于表白，一切深刻的体验都拙于言辞
+								</label>
+							</div>
+							<div class="custom-control custom-radio">
+								<input type="radio" id="customRadio02" name="customRadio" class="custom-control-input">
+								<label class="custom-control-label  editResult" for="customRadio02">被人理解是幸运的，但不被理解未必不幸。一个把自己的价值完全寄托于他人的理解上面的人往往并无价值</label>
+							</div>
+							<div class="custom-control custom-radio">
+								<input type="radio" id="customRadio03" name="customRadio" class="custom-control-input">
+								<label class="custom-control-label editResult" for="customRadio03">孤独和喧嚣都难以忍受。如果一定要忍受，我宁可选择孤独。</label>
+							</div>
+							<div class="custom-control custom-radio">
+								<input type="radio" id="customRadio04" name="customRadio" class="custom-control-input">
+								<label class="custom-control-label editResult" for="customRadio04">不要太在乎一些人，越在乎，越卑微。 _____周国平</label>
+							</div>
+							<div class="cardfooter" style="position:  absolute;right: 1rem;top: 1rem;  display: none;">
+								<span class="fa fa-times-circle mr-3 delete" name="card02"></span>
+								<span class="fa fa-clone copy mr-3" name="card02"></span>
+								<span class="fa fa-pencil-square-o edit text-info" name="card02" aria-hidden="true"></span>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<!-- <div class="col-sm-2"></div> -->
+			<div id="editForm">
+				<div id="editMyQuestion">
+					<div class="mb-3 d-flex justify-content-between">
+						<div>
+							正在编辑
+							<span class="badge badge-info " id="editingQuesOrder"></span>
+							...
+						</div>
+						<div>
+							<span class="badge badge-danger mr-1" id="minuOption">
+								<i class="fa fa-minus"></i>
+							</span>
+							<span class="badge badge-success" id="addOption">
+								<i class="fa fa-plus"></i>
+							</span>
+						</div>
+					</div>
+					<form id="editOrCreateForm">
+
+						<i itemflagLocation></i>
+						<div class="form-group">
+							<label for="itemTitle" hidden>标题</label>
+							<div class="input-group">
+								<div class="input-group-prepend" hidden>
+									<span class="input-group-text" id="itemprepend0">标题</span>
+								</div>
+								<textarea class="form-control" rows="1" name="0" id="itemTitle" placeholder="标题" aria-describedby="itemprepend0"></textarea>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="item0" hidden>选项1</label>
+							<div class="input-group">
+								<div class="input-group-prepend" hidden>
+									<span class="input-group-text" id="itemprepend1">选项1</span>
+								</div>
+								<textarea name="1" class="form-control" rows="2" id="item0" placeholder="选项1" aria-describedby="itemprepend1"></textarea>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="item1" hidden>选项2</label>
+							<div class="input-group">
+								<div class="input-group-prepend" hidden>
+									<span class="input-group-text" id="itemprepend1">选项2</span>
+								</div>
+								<textarea name="2" class="form-control" rows="2" id="item1" placeholder="选项2" aria-describedby="itemprepend1"></textarea>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="item2" hidden>选项3</label>
+							<div class="input-group">
+								<div class="input-group-prepend" hidden>
+									<span class="input-group-text" id="itemprepend2">选项3</span>
+								</div>
+								<textarea name="3" class="form-control" rows="2" id="item2" placeholder="选项3" aria-describedby="itemprepend2"></textarea>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="item3" hidden>选项4</label>
+							<div class="input-group">
+								<div class="input-group-prepend" hidden>
+									<span class="input-group-text" id="itemprepend3">选项4</span>
+								</div>
+								<textarea name="4" class="form-control" rows="2" id="item3" placeholder="选项4" aria-describedby="itemprepend3"></textarea>
+							</div>
+						</div>
+
+						<div class="mt-3 d-flex justify-content-end">
+							<button type="button" class="btn btn-sm btn-outline-danger  mr-2" id="cancleEditBut">
+								取消
+								<span class="fa fa-times-circle" name="card02"></span>
+							</button>
+							<button type="button" class="btn btn-sm btn-outline-success" id="sureFinishBut">
+								确认
+								<span class="fa fa-check"></span>
+							</button>
+						</div>
+
+					</form>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- data-backdrop="false"去除遮罩层  -->
+	<div class="modal fade bd-example-modal-sm" id="myModal" role="dialog" aria-hidden="true">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content" style=" min-width: 10rem; padding: 0.4rem 0.4rem; ">
+				<p class="text-center mb-0">
+					<span class="fa fa-clone-circle text-success mr-1" aria-hidden="true" id="faColor"></span>
+					<span id="infoMoal">提交成功</span>
+				</p>
+			</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript">
+
+	$(document).ready(function () {
+
+		function ShowModal(info, color) {
+			$('#myModal').modal('show');
+			$("#faColor").removeClass();
+			color += " fa  mr-1";
+			$("#faColor").addClass(color);
+
+			$("#infoMoal").html(info);
+			setTimeout(function () {
+				$("#myModal").modal("hide")
+			}, 1200);
+		}
+
+		// 全局的递增数字
+		var num = 303;
+		var formNum = 0;
+
+		/*控制 - 删除和复制按钮 - 的显示*/
+		function MoveToCard() {
+			$(this).find(".cardfooter").show(200);
+		}
+		function LeaveFromCard() {
+			$(this).find(".cardfooter").hide();
+		}
+		// 鼠标移入到问题内，出现提示
+		$(".card").mouseenter(MoveToCard).mouseleave(LeaveFromCard);
+
+		/*
+		删除题目
+		思路： 删除该表单将一个问题的id保存到，删除按钮的 name属性上，获取name属性的值，将其隐藏。
+		*/
+		function deleteQuestion() {
+			$("#" + $(this).attr("name")).remove();
+			// 题目排序
+			arrageOrderQuestion();
+		}
+		function copyQuestion() {
+			var cqNum = ++num;
+			var curLocQuestion = "#" + $(this).attr("name");
+			var curQuestionDom = $(curLocQuestion).clone();
+
+			// 修改cardid 和 name
+			var copycardId = "card" + (++cqNum);
+			curQuestionDom.attr("id", copycardId);
+			curQuestionDom.find(".cardfooter span").attr("name", copycardId);
+			curQuestionDom.find(".cardfooter").css("display", "none");
+
+			// 修改选项
+			curQuestionDom.find(".custom-control").each(function (index, element) {
+				$(element).find("input").attr("id", "optionCopy" + (++cqNum));
+				$(element).find("label").attr("for", "optionCopy" + cqNum);
+			});
+			$(curLocQuestion).after(curQuestionDom.prop("outerHTML"));
+			var copyIdstr = "#" + copycardId;
+			$(copyIdstr + " .cardfooter span.delete").click(deleteQuestion);
+			$(copyIdstr + " .cardfooter span.copy").click(copyQuestion);
+			$(copyIdstr + " .cardfooter span.edit").click(editQuestion);
+			$(copyIdstr).mouseenter(MoveToCard).mouseleave(LeaveFromCard);
+			// console.log(curQuestionDom.prop("outerHTML"));
+			arrageOrderQuestion();
+			num = ++cqNum;
+		}
+		$(".delete").click(deleteQuestion);
+		$(".copy").click(copyQuestion);
+
+		// 样式预览
+		function previewMyQuestion() {
+			$("#navHeader, #btnGroup, #editForm").toggle(1000);
+			$("#cancelPrviewBut").toggle();
+		}
+		$("#prviewThis").click(previewMyQuestion);
+		$("#cancelPrviewBut").click(previewMyQuestion);
+
+		/* ---- Left Start ---- */
+		function arrageOrderQuestion() {
+			var orderCollection = $(".questionOrder");
+			var orderLength = orderCollection.length;
+			orderCollection.each(function (index, element) {
+				$(this).text(orderLength - index);
+			});
+		}
+		$("#orderQuestion").click(arrageOrderQuestion)
+		/* ---- Left Start ---- */
+
+
+		/* ---- Center Start ---- */
+		// 创建-垂直表单-多选题
+		function createMultipleChoiceQuestionVertical() {
+			addRadioVertical();
+			$("#card" + (num - 1)).find("input").each(function (index, element) {
+				$(this).attr("type", "checkbox");
+			});
+		}
+		$("#createMultipleVertical").click(createMultipleChoiceQuestionVertical);
+
+		// 创建-水平表单-多选题
+		function createMultipleChoiceQuestionInline() {
+			addRadioInLine();
+			$("#card" + (num - 1)).find("input").each(function (index, element) {
+				$(this).attr("type", "checkbox");
+			});
+		}
+		$("#createMultipleInline").click(createMultipleChoiceQuestionInline);
+
+		// 创建-水平表单-单选题
+		function addRadioInLine() {
+			addRadioVertical();
+			$("#card" + (num - 1)).find(".custom-radio").each(function (index, element) {
+				$(this).addClass(" custom-control-inline");
+			});
+		}
+		// 创建-竖直表单-单选题
+		function addRadioVertical() {
+			if ($('.mydiv').length && $('.mydiv').length > 0)
+				var insertQuestionTo = $(".card:last");
+			if (!(insertQuestionTo && insertQuestionTo.length > 0)) {
+				insertQuestionTo = $("#flagLocation");
+			}
+			insertQuestionTo.before(["<div class=\"card mt-3\" id=\"card" + num + "\" style=\"border-color: #ffffff;\">",
+				"<div class=\"card-body\">",
+				"<h5 class=\"titleQuestion\"><span class=\"badge badge-success mr-2 questionOrder\">2</span><span class=\"card-title editResult\">你最喜欢哪一个角色？</span></h5>",
+				"<div class=\"custom-control custom-radio\">",
+			"<input type=\"radio\" id=\"customRadio" + (++formNum) + "\" name=\"customRadio\" class=\"custom-control-input\">",
+			"<label class=\"custom-control-label editResult\" for=\"customRadio" + (formNum++) + "\">天蓬元帅",
+				"</label>",
+				"</div>",
+				"<div class=\"custom-control custom-radio\">",
+			"<input type=\"radio\" id=\"customRadio" + formNum + "\" name=\"customRadio\" class=\"custom-control-input\">",
+			"<label class=\"custom-control-label editResult\" for=\"customRadio" + (formNum++) + "\">沙悟净</label>",
+				"</div>",
+				"<div class=\"custom-control custom-radio\">",
+			"<input type=\"radio\" id=\"customRadio" + formNum + "\" name=\"customRadio\" class=\"custom-control-input\">",
+			"<label class=\"custom-control-label editResult\" for=\"customRadio" + (formNum++) + "\">白龙马</label>",
+				"</div>",
+				"<div class=\"custom-control custom-radio\">",
+			"<input type=\"radio\" id=\"customRadio" + formNum + "\" name=\"customRadio\" class=\"custom-control-input\">",
+			"<label class=\"custom-control-label editResult\" for=\"customRadio" + (formNum++) + "\">孙悟空</label>",
+				"</div>",
+				"<div class=\"cardfooter\" style=\"position:  absolute;right: 1rem;top: 1rem;  display: none;\">",
+			"<span class=\"fa fa-times-circle delete mr-3\" name=\"card" + num + "\"></span>",
+			"<span class=\"fa fa-clone copy mr-3\" name=\"card" + num + "\"></span>",
+			"<span class=\"fa fa-pencil-square-o edit text-info\" name=\"card" + num + "\" aria-hidden=\"true\"></span>",
+				"</div>",
+				"</div>",
+				"</div>"].join(""));
+			var newCardId = "#card" + (num++);
+			$(newCardId).mouseenter(MoveToCard).mouseleave(LeaveFromCard);
+			$(newCardId + " .cardfooter span.delete").click(deleteQuestion);
+			$(newCardId + " .cardfooter span.copy").click(copyQuestion);
+			$(newCardId + " .cardfooter span.edit").click(editQuestion);
+			// 题目排序
+			arrageOrderQuestion();
+		}
+
+		$("#radioVertical").click(addRadioVertical);
+		$("#radioInline").click(addRadioInLine);
+		/* ---- Center End---- */
+
+		/* ---- Right Start---- */
+		// 提交表单数据
+		function writeEditFinishQuestionTo(id, result) {
+			$(id).each(function (index, item) {
+				$(item).text(result[index]);
+			});
+		}
+		function finishEditQuestion() {
+			// 获取当前正咋编辑的id
+			var editId = $(this).attr("name");
+			if (editId && editId != "") {
+				var finalId = "#" + editId + " .editResult";
+				var result = [];
+				var hasSomeOneFix = true;
+				var editNumOption = $("#editMyQuestion .form-control").each(function (index, element) {
+					// 将修改后的值写回问题
+					result[index] = $(element).val();
+					if (result[index] == "" || result[index].trim.length == 0) {
+						hasSomeOneFix = false;
+					}
+					console.log("Fish Edit Values : \"" + result[index] + "\"");
+				}).length;
+				if (hasSomeOneFix) {
+					console.log("edit Finish Option Num :" + editNumOption);
+					/*加上标题一起共5个*/
+					if (editNumOption == 5) {
+						writeEditFinishQuestionTo(finalId, result);
+					} else {
+						// 少于四个选项或者多余四个选项必须操作原来题目的选项
+						var cardNum = parseInt(editId.replace(/[^0-9]/ig, ""));
+						var cardId = "#card" + cardNum;
+						console.log("getcardNum ： " + cardNum);
+						var questionChoosed = $(cardId + " .custom-control:first");
+						var optionDom = questionChoosed.clone();
+						$(cardId + " .custom-control").remove();
+
+						// 选项个数
+						var optionLength = result.length - 1;
+						var optionCollectionDom = "";
+						for (var i = 0; i < optionLength; i++) {
+							optionDom.find("input").attr("id", "option" + (++cardNum));
+							optionDom.find("label").attr("for", "option" + (cardNum));
+							optionCollectionDom = optionCollectionDom + optionDom.prop("outerHTML");
+						}
+						// 写入Body
+						console.log("optionCollectionDom :" + optionCollectionDom);
+						$(cardId + " .titleQuestion").after(optionCollectionDom);
+						writeEditFinishQuestionTo(finalId, result);
+						/*<div class="custom-control custom-radio custom-control-inline">
+							<input type="radio" id="customRadio001" name="customRadio" class="custom-control-input">
+							<label class="custom-control-label editResult" for="customRadio001">周***</label>
+						</div>*/
+						var removeOptionNum = editNumOption - 5;
+						while (removeOptionNum-- > 0) {
+							$("#editOrCreateForm .form-group:last").remove();
+						}
+					}
+					// 删除多余修改项，重置修改问题表单
+					cancleEditForm();
+				}else{
+					ShowModal("有选项题目为空", "fa-warning text-warning");
+				}
+			} else {
+				// 弹出提示框
+				ShowModal("请先选中题目(点击题目)", "fa-warning text-warning");
+			}
+		}
+		$("#sureFinishBut").click(finishEditQuestion);
+		function addOptionQuestion() {
+			/* 找到最后一个表单项 */
+			// TODO: 最多只有7个
+			if ($("#editMyQuestion .form-control").length < 7) {
+				var hasAQuestion = $("#sureFinishBut").attr("name");
+				if (hasAQuestion && hasAQuestion != "") {
+					var lastItem = $("#editOrCreateForm").find(".form-group:last");
+					var itemNum = 0;
+					var itemNumStr = lastItem.find("textarea").attr("name");
+					console.log("itemNumStr ： " + ++itemNumStr);
+					itemNum = parseInt(itemNumStr);
+
+					console.log("add Option Question : " + itemNum);
+					var itemHtml = ["<div class=\"form-group\">",
+						"<label for=\"item" + itemNum + "\" hidden>选项" + itemNum + "</label>",
+						"<div class=\"input-group\">",
+						"<div class=\"input-group-prepend\" hidden>",
+						"<span class=\"input-group-text\" id=\"itemprepend" + itemNum + "\">选项" + itemNum + "</span>",
+						"</div>",
+						"<textarea name=\"" + itemNum + "\" class=\"form-control\" rows=\"2\" id=\"item" + itemNum + "\" placeholder=\"选项" + itemNum + "\" aria-describedby=\"itemprepend" + itemNum + "\" ></textarea>",
+						"</div>",
+						"</div>"].join("");
+					lastItem.after(itemHtml);
+				} else {
+					ShowModal("请先选中题目(点击题目)", "fa-warning text-warning");
+					// 弹出提示框
+				}
+				num++;
+			}
+		}
+		function minuOptionQuestion() {
+			minuOptionAuto(1);
+		}
+		function minuOptionAuto(params) {
+			if ($("#editMyQuestion .form-control").length > 3 || params < 0) {
+				var hasAQuestion = $("#sureFinishBut").attr("name");
+				if (hasAQuestion && hasAQuestion != "") {
+					$("#editOrCreateForm").find(".form-group:last").remove();
+				} else {
+					ShowModal("请先选中题目(点击题目)", "fa-warning text-warning");
+					// 弹出提示框
+				}
+			}
+		}
+		$("#addOption").click(addOptionQuestion);
+		$("#minuOption").click(minuOptionQuestion);
+
+		// 获得四个选项的值
+		function cancleEditForm() {
+			$("#editOrCreateForm")[0].reset();
+			$("#sureFinishBut").attr("name", "");
+		}
+		$("#cancleEditBut").click(cancleEditForm);
+
+		function editQuestion() {
+			var curEditIdVal = $(this).attr("name");
+			var curEditCardId = "#" + curEditIdVal;
+			// 正在编辑题目 - 序号
+			$("#editingQuesOrder").text($(curEditCardId + " .questionOrder").text());
+			console.log("curEditCardId - " + curEditCardId);
+
+			// 记住当前 - 题目cardId
+			$("#sureFinishBut").attr("name", curEditIdVal);
+			var textAreDom = $(curEditCardId).find("textarea");
+			if (!(textAreDom && textAreDom.length > 0)) {
+				// 获取题目值
+				// -1 表示去掉标题
+				var optionDom = $(curEditCardId).find(".custom-control-label");
+				var optionsLength = optionDom.length;
+				var optionsEditDom = $("#editMyQuestion .form-control");
+				var optionsEditLength = optionsEditDom.length - 1;
+				var itemAdd = 0;
+
+				if (optionsLength > optionsEditLength) {
+					itemAdd = optionsLength - optionsEditLength;
+					while (itemAdd-- > 0) {
+						addOptionQuestion();
+					}
+				} else {
+					itemAdd = optionsEditLength - optionsLength;
+					while (itemAdd-- > 0) {
+						minuOptionQuestion();
+					}
+				}
+				console.log("editing should i add this num : " + itemAdd);
+				var options = [];
+				optionDom.each(function (index, element) {
+					// 将题目的 文字 写到 输入框
+					options[index] = $(this).text();
+				});
+				$("#editMyQuestion .form-control:gt(0)").each(function (i, e) { $(e).val(options[i]) });
+			} else {
+				console.log("没有选项!");
+				var removeEditOptions = $("#editMyQuestion .form-control").length;
+				while (removeEditOptions-- > 1) {
+					minuOptionAuto(-1);
+				}
+			}
+			// 获取题目标题
+			var title = $(curEditCardId).find(".card-title").text();
+			$("#editMyQuestion .form-control:eq(0)").val(title);
+			// 将 ID 写入 到编辑栏目
+			console.log("正在编辑 ：  title : " + title);
+		}
+		$(".edit").click(editQuestion);
+		/* ---- Right End---- */
+
+		/* ---- 提交所有问题 End---- */
+		$("#generateFinishQuestionForm").click(function () {
+			// var form = document.getElementById("myFormId");
+			//form.action = "UserServlet";
+			//form.method = "post";
+			//form.submit();
+			var postData = "[";
+			// 拿到所有问卷数据
+			$(".card").each(function (index, element) {
+				var txt = [];
+				$(element).find(".editResult").each(function (index, element) {
+					txt[index] = $(element).text().trim();
+				})
+				console.log(index + txt[0]);
+				postData = postData + ["{",
+					"\"title\": \"" + txt[0] + "\", ",
+					"\"options\": [",
+					"\"" + txt[1].trim() + "\",",
+					"\"" + txt[2].trim() + "\",",
+					"\"" + txt[3].trim() + "\",",
+					"\"" + txt[4].trim() + "\"",
+					"]",
+					"},"].join("");
+
+			});
+
+			postData = postData.substr(0, postData.length - 1);
+			postData = postData + "]";
+			console.log("PostData : " + postData);
+			$.post("${pageContext.request.contextPath}/UserServlet?method=createQuestion", { data: postData }, function (data) { }, "json");
+		});
+		/* ---- 提交表单 End---- */
+	});
+</script>
+
+</html>
+
+<!-- 
+
+[
+        {
+            "title": "黑龙江", 
+            "options": {
+                "a": "",
+                "b": "",
+                "c": "",
+                "d": ""
+            }
+        }, 
+        {
+            "title": "黑龙江", 
+            "options": {
+                "a": "",
+                "b": "",
+                "c": "",
+                "d": ""
+            }
+        }, 
+        {
+            "title": "黑龙江", 
+            "options": {
+                "a": "",
+                "b": "",
+                "c": "",
+                "d": ""
+            }
+        }
+]
+
+ -->
